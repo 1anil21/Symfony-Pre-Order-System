@@ -36,6 +36,16 @@ To run server execute the command belw:
  $ php bin/console server:start or ./bin/console server:start
 ```
 
+## Admin Panel
+
+You can access admin panel from /admin url with this credentials:
+username: admin
+password: admin
+
+New admins and products can be added and removed from the admin panel. Also pre-orders can be confirmed.
+
+## Auto Reject
+
 You can set a cron job for every hour in order to autoReject pre orders that have not confirmed in 24 hours.
 Open crontab to edit with this command:
 ```
