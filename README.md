@@ -41,3 +41,10 @@ Add a cron job line works every hour with this command:
 ```
 0 * * * * php ~/www/preorder_api/bin/console preorder:autoreject --env=prod
 ```
+
+## Tests
+
+You can run unit test with this command:
+```
+ $ php bin/phpunit or ./bin/phpunit
+```
