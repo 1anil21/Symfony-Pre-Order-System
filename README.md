@@ -26,7 +26,7 @@ Create database and tables using these commands below:
  $ php bin/console doctrine:migrations:migrate or ./php bin/console doctrine:migrations:migrate
 ```
 
-Generate fake products use the command below:
+Generate fake products using the command below:
 ```
  $ php bin/console doctrine:fixtures:load or ./bin/console doctrine:fixtures:load
 ```
