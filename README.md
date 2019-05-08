@@ -31,6 +31,11 @@ Generate fake products using the command below:
  $ php bin/console doctrine:fixtures:load or ./bin/console doctrine:fixtures:load
 ```
 
+To run server execute the command belw:
+```
+ $ php bin/console server:start or ./bin/console server:start
+```
+
 You can set a cron job for every hour in order to autoReject pre orders that have not confirmed in 24 hours.
 Open crontab to edit with this command:
 ```
@@ -44,7 +49,7 @@ Add a cron job line works every hour with this command:
 
 ## Tests
 
-You can run unit test with this command:
+You can run unit tests with this command:
 ```
  $ php bin/phpunit or ./bin/phpunit
 ```
