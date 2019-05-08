@@ -39,10 +39,9 @@ class SmsController extends AbstractController
                 )
             );
 
+            return $message;
         } catch (\Exception $exception) {
             return false;
         }
-
-        return true;
     }
 }

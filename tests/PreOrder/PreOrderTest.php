@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Cart;
+namespace App\Tests\PreOrder;
 
 use App\Component\Cart\CartFactory;
 use App\Controller\PreorderController;
