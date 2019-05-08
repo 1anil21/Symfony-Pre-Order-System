@@ -1,0 +1,16 @@
+easy_admin:
+    site_name: 'Pre Order System'
+    user:
+        display_name: true
+        display_avatar: false
+    design:
+        brand_color: '#1ABC9C'
+    entities:
+        Product:
+            class: App\Entity\Product
+        PreOrder:
+            class: App\Entity\PreOrder
+            list:
+                actions: ['confirm']
+        User:
+            class: App\Entity\User

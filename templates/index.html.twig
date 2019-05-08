@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Pre Order System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .cart-title {
+            font-size:16px;
+            font-weight: 500;
+            border-bottom: 2px solid black;
+        }
+        .product-img img {
+            width: 200px;
+        }
+        .item {
+            border-bottom: 1px solid black;
+        }
+        .item-name, .item-quantity {
+            float: left;
+        }
+        .item-price, .item-remove {
+            float: right;
+        }
+        .subtotal-container {
+            font-size: 17px;
+        }
+        .subtotal-value, .subtotal-currency {
+            color: red;
+            font-weight: 400;
+        }
+        /* Modals */
+        .modal-dialog th, td {
+            padding: 3px;
+        }
+        .subtotal-container, .clear-cart-container, #checkout-btn {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light">
+                <div class="col-md-6 float-md-left">
+                    <a class="navbar-brand" href="/">Pre Order System</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-9">
+
+                        <div class="row">
+                            {% for item in products %}
+                                <div class="product col-3" data-id="{{ item.id }}">
+                                    <div class="product-img"><img src="https://cdn0.iconfinder.com/data/icons/cosmo-layout/40/box-512.png" /></div>
+                                    <div class="product-name">{{ item.name }}</div>
+                                    <div class="product-price">{{ item.price }} TL</div>
+                                    <form class="row col-12 add-to-cart-container">
+                                        <div class="form-group w-25">
+                                            <label for="">Qty:</label>
+                                        </div>
+                                        <div class="form-group w-25 ml-2">
+                                            <input type="text" class="form-control add-to-cart-quantity" name="quantity" value="1" />
+                                        </div>
+                                        <div class="form-group w-35 ml-2">
+                                            <button type="button" class="form-control btn btn-primary add-to-cart-btn">Add</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="row">
+                            <div class="col-12 cart-container">
+                                <div class="cart-title">Cart</div>
+                                <div class="item-container">Your cart is empty!</div>
+                                <div class="subtotal-container">
+                                    <div class="form-inline">
+                                        <div class="subtotal-title"><b>Subtotal:</b></div>
+                                        <div class="subtotal-value"></div>
+                                        <div class="subtotal-currency"> TL</div>
+                                    </div>
+                                </div>
+                                <div class="clear-cart-container">
+                                    <a href="javascript:void(0)" class="clear-cart">Empty Cart</a>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row col-12">
+                            <button id="checkout-btn" type="button" class="form-control btn btn-success">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="preorder-modal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Pre order now!</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form id="preorder-form" role="form">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" name="name" id="name" class="form-control input-sm" placeholder="First Name">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="form-group">
+                                        <input type="text" name="surname" id="surname" class="form-control input-sm" placeholder="Last Name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address">
+                            </div>
+                            <div class="form-group">
+                                <input type="tel" name="phone" id="phone" class="form-control input-sm" placeholder="Phone (05xxxxxxxxx)" maxlength="11" minlength="11">
+                            </div>
+                            <input type="hidden" name="token" value="{{ csrf_token('preorder') }}"/>
+                            <input type="submit" id="preorder-btn" value="Pre Order" class="btn btn-info btn-block">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function(){
+        getCart();
+    });
+
+    $('.add-to-cart-btn').click(function(){
+        var productId = $(this).closest('.product').data('id');
+        var quantity = $(this).closest('.product').find('.add-to-cart-quantity').val();
+
+       addItem(productId, quantity);
+    });
+
+    function bindCartButtons(){
+        $('.remove-item-btn').click(function(){
+            var productId = $(this).closest('.item').data('id');
+            removeItem(productId);
+        });
+
+        $('.item-quantity-text').keyup(function(){
+            var productId = $(this).closest('.item').data('id');
+            var quantity = $(this).val();
+
+            updateItem(productId, quantity);
+        });
+    }
+
+    $('.clear-cart').click(function(){
+        clearCart();
+    });
+
+    $('#checkout-btn').click(function(){
+        $('#preorder-modal').modal('show');
+    });
+
+    $('#preorder-form').submit(function(e){
+        e.preventDefault();
+
+        if ($(this).find('input[name="name"]').val() === ""){
+            alert("Please enter your name!");
+            return;
+        }
+        if ($(this).find('#surname').val() === ""){
+            alert("Please enter your surname!");
+            return;
+        }
+        if ($(this).find('#email').val() === ""){
+            alert("Please enter your email!");
+            return;
+        }
+        if ($(this).find('#phone').val() === "" && $(this.find('#phone').val().length === 11)){
+            alert("Please enter your phone!");
+            return;
+        }
+
+        preOrder();
+    });
+
+    function preOrder(){
+        $.ajax({
+            url: '/preorder',
+            type: 'POST',
+            data: $('#preorder-form').serialize(),
+            dataType:'text'
+        }).done(function(){
+            clearCart();
+            showCartEmpty();
+            alert("Your pre-order is placed successfully.");
+            $('#preorder-modal').modal('hide');
+        }).fail(function(jqXHR, textStatus, errorThrown){
+            var errorMessage = jqXHR.responseText;
+            if (errorMessage.length > 0) {
+                alert(errorMessage);
+            }
+        });
+    }
+
+    function getCart(){
+        $.ajax({
+            type: "GET",
+            url: "/cart",
+            dataType: "json"
+        }).done(function(cart){
+            listCart(cart);
+        });
+    }
+
+    function listCart(cart){
+        $('.item-container').empty();
+
+        for (var i = 0; i < cart.items.length; ++i){
+            var name = '<div class="item-name">'+cart.items[i].name+'</div>';
+            var price = '<div class="item-price">'+cart.items[i].price+' TL</div>';
+            var quantity = '<div class="item-quantity">Qty: <input type="text" class="item-quantity-text" value="'+cart.items[i].quantity+'" size="1" /></div>';
+            var removeBtn = '<div class="item-remove"><a class="remove-item-btn" href="javascript:void(0)">Remove</a></div>';
+            var item = '<div class="item" data-id="'+cart.items[i].productId+'"><div class="item-main clearfix">'+name+price+'</div><div class="item-sub clearfix">'+quantity+removeBtn+'</div></div>';
+            $('.item-container').append(item);
+        }
+
+        if (cart.items.length === 0){
+            showCartEmpty();
+        } else {
+            $('.subtotal-value').html(cart.totalPrice);
+            $('.clear-cart-container').show();
+            $('.subtotal-container').show();
+            $('#checkout-btn').show();
+        }
+
+        bindCartButtons();
+    }
+
+    function showCartEmpty(){
+        $('.item-container').html("Your cart is empty!");
+        $('.clear-cart-container').hide();
+        $('.subtotal-container').hide();
+        $('#checkout-btn').hide();
+    }
+
+    function addItem(productId, quantity){
+        $.ajax({
+            type: "POST",
+            url: "/cart/add",
+            data: {"productId": productId, "quantity": quantity},
+            dataType: "json"
+        }).done(function(cart){
+            listCart(cart);
+        });
+    }
+
+    function removeItem(productId,){
+        $.ajax({
+            type: "DELETE",
+            url: "/cart/remove",
+            data: {"productId": productId},
+            dataType: "json"
+        }).done(function(cart){
+            listCart(cart);
+        });
+    }
+
+    function updateItem(productId, quantity){
+        $.ajax({
+            type: "PUT",
+            url: "/cart/update",
+            data: {"productId": productId, "quantity": quantity},
+            dataType: "json"
+        }).done(function(cart){
+            listCart(cart);
+        });
+    }
+
+    function clearCart(){
+        $.ajax({
+            type: "POST",
+            url: "/cart/clear",
+        }).done(function(){
+            getCart();
+        });
+    }
+</script>
+</body>
+</html>
