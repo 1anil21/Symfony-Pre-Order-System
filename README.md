@@ -31,7 +31,7 @@ Generate fake products using the command below:
  $ php bin/console doctrine:fixtures:load or ./bin/console doctrine:fixtures:load
 ```
 
-To run server execute the command belw:
+To run server execute the command below:
 ```
  $ php bin/console server:start or ./bin/console server:start
 ```
