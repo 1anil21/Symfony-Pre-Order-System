@@ -91,6 +91,7 @@ class PreorderController extends AbstractController
         if (!$this->createPreorder($customerName, $customerSurname, $customerEmail, $customerPhone, $cart)){
             $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_INTERNAL_SERVER_ERROR);
             $response->setContent("An error occured!");
+            return $response;
         }
 
         $response->setStatusCode(\Symfony\Component\HttpFoundation\Response::HTTP_OK);
